@@ -38,6 +38,6 @@ jobs:
 
       - name: Deploy to AWS Tomcat
         run: |
-          scp -r target/*.war ec2-user@<your-aws-instance-public-dns>:<tomcat-app-directory>
-          ssh ec2-user@<your-aws-instance-public-dns> "cd <tomcat-app-directory> && sudo ./shutdown.sh"
-          ssh ec2-user@<your-aws-instance-public-dns> "cd <tomcat-app-directory> && sudo ./startup.sh"
+          scp -r target/*.war ec2-user@ec2-34-227-98-60.compute-1.amazonaws.com:/root/apache-tomcat-9.0.98/webapps
+          ssh ec2-user@ec2-34-227-98-60.compute-1.amazonaws.com "cd /root/apache-tomcat-9.0.98/webapps && sudo ./shutdown.sh"
+          ssh ec2-user@ec2-34-227-98-60.compute-1.amazonaws.com "cd /root/apache-tomcat-9.0.98/webapps && sudo ./startup.sh"
