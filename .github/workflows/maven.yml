@@ -33,7 +33,7 @@ jobs:
         run: |
           # Define variables
           WAR_FILE=target/*.war
-          TOMCAT_URL=http://34.227.98.60:1234/manager/text
+          TOMCAT_URL=${{ secrets.TOMCAT_URL }}
 
           # Deploy WAR file
           curl -u "$TOMCAT_USER:$TOMCAT_PASSWORD" \
