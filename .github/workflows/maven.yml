@@ -1,4 +1,4 @@
-name: Build and Deploy to AWS Tomcat
+name: Build and Deploy to AWS Tomcat1
 
 on:
   push:
