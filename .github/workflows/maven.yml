@@ -37,16 +37,18 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
+      - name: Start SSH agent
+        run: |
+          eval $(ssh-agent -s)
+          echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+
       - name: Add known hosts
         run: |
           mkdir -p ~/.ssh
           ssh-keyscan -H ec2-34-227-98-60.compute-1.amazonaws.com >> ~/.ssh/known_hosts
 
       - name: Deploy to AWS Tomcat
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
-          echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
           scp -o StrictHostKeyChecking=no -r target/*.war ec2-user@ec2-34-227-98-60.compute-1.amazonaws.com:/root/apache-tomcat-9.0.98/webapps
           ssh -o StrictHostKeyChecking=no ec2-user@ec2-34-227-98-60.compute-1.amazonaws.com "cd /root/apache-tomcat-9.0.98/webapps && sudo ./shutdown.sh"
           ssh -o StrictHostKeyChecking=no ec2-user@ec2-34-227-98-60.compute-1.amazonaws.com "cd /root/apache-tomcat-9.0.98/webapps && sudo ./startup.sh"
