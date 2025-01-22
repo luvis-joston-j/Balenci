@@ -40,7 +40,7 @@ jobs:
       - name: Start SSH agent
         run: |
           eval $(ssh-agent -s)
-          echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' | ssh-add -
 
       - name: Add known hosts
         run: |
@@ -52,3 +52,4 @@ jobs:
           scp -o StrictHostKeyChecking=no -r target/*.war ec2-user@ec2-34-227-98-60.compute-1.amazonaws.com:/root/apache-tomcat-9.0.98/webapps
           ssh -o StrictHostKeyChecking=no ec2-user@ec2-34-227-98-60.compute-1.amazonaws.com "cd /root/apache-tomcat-9.0.98/webapps && sudo ./shutdown.sh"
           ssh -o StrictHostKeyChecking=no ec2-user@ec2-34-227-98-60.compute-1.amazonaws.com "cd /root/apache-tomcat-9.0.98/webapps && sudo ./startup.sh"
+
