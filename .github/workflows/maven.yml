@@ -16,6 +16,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
+          distribution: 'adoptium'
           java-version: '17'
 
       - name: Build with Maven
