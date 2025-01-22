@@ -1,4 +1,4 @@
-name: Build and Deploy to Heroku
+name: Build and Deploy to AWS Tomcat
 
 on:
   push:
@@ -29,14 +29,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Heroku CLI
-        uses: akhileshns/heroku-deploy@v3.12.12
+      - name: Set up AWS CLI
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: <your-heroku-app-name>
-          heroku_email: <your-heroku-email>
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
 
-      - name: Deploy to Heroku
+      - name: Deploy to AWS Tomcat
         run: |
-          git remote add heroku https://git.heroku.com/<your-heroku-app-name>.git
-          git push heroku main
+          scp -r target/*.war ec2-user@<your-aws-instance-public-dns>:<tomcat-app-directory>
+          ssh ec2-user@<your-aws-instance-public-dns> "cd <tomcat-app-directory> && sudo ./shutdown.sh"
+          ssh ec2-user@<your-aws-instance-public-dns> "cd <tomcat-app-directory> && sudo ./startup.sh"
