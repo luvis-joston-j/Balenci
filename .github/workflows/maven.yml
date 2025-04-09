@@ -20,6 +20,9 @@ jobs:
       - name: Build Docker image
         run: docker build -t demo-trivy-app .
 
+      - name: Create reports directory
+        run: mkdir -p trivy-reports
+
       - name: Trivy FS Scan (source code)
         uses: aquasecurity/trivy-action@master
         with:
