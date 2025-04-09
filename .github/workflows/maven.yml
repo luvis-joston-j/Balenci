@@ -20,33 +20,23 @@ jobs:
       - name: Build Docker image
         run: docker build -t demo-trivy-app .
 
-      - name: Install Trivy (latest)
-        uses: aquasecurity/setup-trivy@v1
-
       - name: Trivy FS Scan (source code)
-        run: |
-          mkdir -p trivy-reports
-          trivy fs . \
-            --format json \
-            --severity CRITICAL,HIGH \
-            --output trivy-reports/fs-report.json
-
-          trivy fs . \
-            --format table \
-            --severity CRITICAL,HIGH \
-            --output trivy-reports/fs-report.txt
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: fs
+          scan-ref: .
+          format: table
+          severity: CRITICAL,HIGH
+          output: trivy-reports/fs-report.txt
 
       - name: Trivy Image Scan (Docker image)
-        run: |
-          trivy image demo-trivy-app \
-            --format json \
-            --severity CRITICAL,HIGH \
-            --output trivy-reports/image-report.json
-
-          trivy image demo-trivy-app \
-            --format table \
-            --severity CRITICAL,HIGH \
-            --output trivy-reports/image-report.txt
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: image
+          scan-ref: demo-trivy-app
+          format: table
+          severity: CRITICAL,HIGH
+          output: trivy-reports/image-report.txt
 
       - name: Upload Trivy Reports
         uses: actions/upload-artifact@v4
