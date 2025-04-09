@@ -21,9 +21,7 @@ jobs:
         run: docker build -t demo-trivy-app .
 
       - name: Install Trivy (latest)
-        uses: aquasecurity/setup-trivy@v0.10.0
-        with:
-          version: latest
+        uses: aquasecurity/setup-trivy@v1
 
       - name: Trivy FS Scan (source code)
         run: |
