@@ -23,24 +23,23 @@ jobs:
       - name: Install Trivy
         uses: aquasecurity/trivy-action@master
         with:
-          version: '0.50.1'
+          version: '0.49.1'  # Working stable version (you can remove to get latest)
 
       - name: Trivy FS Scan (source code)
         run: |
-          trivy fs . --format json --severity CRITICAL,HIGH --output trivy-fs-report.json
-          trivy fs . --format table --severity CRITICAL,HIGH --output trivy-fs-report.txt
+          mkdir -p trivy-reports
+          trivy fs . --format json --severity CRITICAL,HIGH --output trivy-reports/fs-report.json
+          trivy fs . --format table --severity CRITICAL,HIGH --output trivy-reports/fs-report.txt
 
       - name: Trivy Image Scan (Docker image)
         run: |
           trivy image demo-trivy-app \
-            --format json --severity CRITICAL,HIGH --output trivy-image-report.json
+            --format json --severity CRITICAL,HIGH --output trivy-reports/image-report.json
           trivy image demo-trivy-app \
-            --format table --severity CRITICAL,HIGH --output trivy-image-report.txt
+            --format table --severity CRITICAL,HIGH --output trivy-reports/image-report.txt
 
       - name: Upload Trivy Reports
         uses: actions/upload-artifact@v4
         with:
           name: trivy-reports
-          path: |
-            trivy-fs-report.*
-            trivy-image-report.*
+          path: trivy-reports/
