@@ -1,5 +1,7 @@
 FROM tomcat:9.0.107-jdk8-corretto-al2
 
+LABEL author=luvisjostonj
+
 ADD target/Balenciaga.war /usr/local/tomcat/webapps
 
 EXPOSE 8080
